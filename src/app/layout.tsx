@@ -67,10 +67,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className="">
-        <NextTopLoader
-          color="#2563eb"
-        />
-        {children}
+        <main className="w-full min-h-screen bg-[#f7f7f7]">
+          <NextTopLoader
+            color="#2563eb"
+          />
+          {children}
+        </main>
       </body>
     </html>
   );
