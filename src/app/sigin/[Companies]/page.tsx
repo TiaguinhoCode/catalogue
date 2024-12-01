@@ -9,31 +9,16 @@ import { Button } from '@/components/ui/button';
 // Imagem
 import slogan from '../../../../public/slogan.png';
 
-// Next.js
+// Next
 import Image from 'next/image';
-import { Metadata } from 'next';
-
-// Metadata para a página
-export const metadata: Metadata = {
-    title: 'Login - CatLog',
-    description: 'Faça login para acessar a plataforma CatLog',
-};
-
-// Função para gerar caminhos estáticos
-export async function generateStaticParams() {
-    return companiesData.map((company) => ({
-        Companies: company.name.toLowerCase(),
-    }));
-}
 
 interface SignInProps {
     params: { Companies: string };
 }
 
 export default async function SigIn({ params }: SignInProps) {
-    const { Companies } = params;
+    const { Companies } = await params;
 
-    // Verifique se a empresa existe no arquivo JSON
     const company = companiesData.find((c) => c.name.toLowerCase() === Companies.toLowerCase());
 
     if (!company) {
@@ -43,7 +28,6 @@ export default async function SigIn({ params }: SignInProps) {
     return (
         <div className="flex min-h-screen bg-gray-100">
             <div className="flex flex-row w-full">
-                {/* Sidebar */}
                 <div className="hidden lg:flex flex-col justify-between bg-blue-700 text-white p-8 lg:max-w-sm xl:max-w-lg">
                     <div className="flex items-center space-x-3">
                         <Image
@@ -67,8 +51,6 @@ export default async function SigIn({ params }: SignInProps) {
                         © 2024 Cataloguê — Todos os direitos reservados
                     </p>
                 </div>
-
-                {/* Formulário */}
                 <div className="flex flex-1 flex-col items-center justify-center px-6 sm:px-10">
                     <div className="flex lg:hidden justify-between items-center w-full mb-6">
                         <div className="flex items-center space-x-3">
@@ -113,8 +95,8 @@ export default async function SigIn({ params }: SignInProps) {
                                 type="submit"
                                 color="primary"
                                 size="lg"
-                                variant="shadow"
-                                description="Entrar"
+                                variant='shadow'
+                                description='Entrar'
                             />
                         </form>
                     </div>
