@@ -13,13 +13,15 @@ import slogan from '../../../../public/slogan.png';
 import Image from 'next/image';
 
 interface SignInProps {
-    params: { Companies: string };
+    params: Promise<{ Companies: string }>; // Atualizado para indicar que é uma Promise
 }
 
 export default async function SigIn({ params }: SignInProps) {
-    const { Companies } = await params;
+    const { Companies } = await params; // Correto: `params` é uma Promise
 
-    const company = companiesData.find((c) => c.name.toLowerCase() === Companies.toLowerCase());
+    const company = companiesData.find(
+        (c) => c.name.toLowerCase() === Companies.toLowerCase()
+    );
 
     if (!company) {
         return <NotFound />;
@@ -95,8 +97,8 @@ export default async function SigIn({ params }: SignInProps) {
                                 type="submit"
                                 color="primary"
                                 size="lg"
-                                variant='shadow'
-                                description='Entrar'
+                                variant="shadow"
+                                description="Entrar"
                             />
                         </form>
                     </div>
