@@ -1,20 +1,20 @@
 'use client'
 
 // React
-import { ComponentProps } from "react"
+import { ComponentProps, ReactNode } from "react"
 
 // Bibliotecas
 import { Button as Btn } from '@nextui-org/react';
 
 // Tipagem
 type InputProps = ComponentProps<typeof Btn> & {
-    description: string;
+    children?: ReactNode;
 }
 
-export function Button({ description, ...rest }: InputProps) {
+export function Button({ children, ...rest }: InputProps) {
     return (
-        <Btn {...rest} className="w-full mt-4">
-            {description}
+        <Btn {...rest}>
+            {children}
         </Btn>
     )
 }

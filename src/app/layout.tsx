@@ -3,9 +3,14 @@ import type { Metadata } from "next";
 
 // Css
 import "./globals.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Biblioteca
 import NextTopLoader from "nextjs-toploader";
+import { ToastContainer } from "react-toastify";
+
+// Context
+import { AuthProvider } from "@/contexts/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -27,7 +32,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "Cataloguê - Seu Catálogo Digital",
     description: "Descubra como criar e compartilhar catálogos digitais de produtos com facilidade. Ideal para negócios de todos os tamanhos.",
-    // url: "https://www.catalogue.com.br",
+    url: "https://catalogue-kappa.vercel.app",
     siteName: "Cataloguê",
     images: [
       {
@@ -67,12 +72,15 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className="">
-        <main className="w-full min-h-screen bg-[#f7f7f7]">
-          <NextTopLoader
-            color="#2563eb"
-          />
-          {children}
-        </main>
+        <AuthProvider>
+          <main className="w-full min-h-screen bg-[#f7f7f7]">
+            <NextTopLoader
+              color="#2563eb"
+            />
+            {children}
+            <ToastContainer autoClose={3000} />
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

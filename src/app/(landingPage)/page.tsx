@@ -5,7 +5,7 @@ import { Main } from "@/components/ui/landingPage/main";
 // Image
 import bannerOne from "../../../public/banner.jpg"
 
-export default function Home() {
+export default function HomePage() {
     return (
         <>
             <Banner imagemUrl={bannerOne} />

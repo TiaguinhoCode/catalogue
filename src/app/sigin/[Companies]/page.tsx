@@ -3,8 +3,7 @@ import companiesData from '@/data/settings/companies.json';
 
 // Componente
 import { NotFound } from '@/components/notFound';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { FormAuth } from '@/components/sigIn';
 
 // Imagem
 import slogan from '../../../../public/slogan.png';
@@ -12,12 +11,14 @@ import slogan from '../../../../public/slogan.png';
 // Next
 import Image from 'next/image';
 
+// React
+
 interface SignInProps {
-    params: Promise<{ Companies: string }>; // Atualizado para indicar que é uma Promise
+    params: Promise<{ Companies: string }>;
 }
 
 export default async function SigIn({ params }: SignInProps) {
-    const { Companies } = await params; // Correto: `params` é uma Promise
+    const { Companies } = await params;
 
     const company = companiesData.find(
         (c) => c.name.toLowerCase() === Companies.toLowerCase()
@@ -28,7 +29,7 @@ export default async function SigIn({ params }: SignInProps) {
     }
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex min-h-screen">
             <div className="flex flex-row w-full">
                 <div className="hidden lg:flex flex-col justify-between bg-blue-700 text-white p-8 lg:max-w-sm xl:max-w-lg">
                     <div className="flex items-center space-x-3">
@@ -37,7 +38,7 @@ export default async function SigIn({ params }: SignInProps) {
                             quality={100}
                             priority
                             alt="slogan"
-                            className="rounded-full w-12 h-12"
+                            className="rounded-full w-24 h-24"
                         />
                         <span className="text-xl font-semibold">CatLog</span>
                     </div>
@@ -74,33 +75,7 @@ export default async function SigIn({ params }: SignInProps) {
                             </p>
                         </div>
 
-                        <form className="space-y-4">
-                            <div>
-                                <Input
-                                    label="E-mail"
-                                    type="email"
-                                    placeholder="Digite seu e-mail"
-                                    fullWidth
-                                    className="mt-2"
-                                />
-                            </div>
-                            <div>
-                                <Input
-                                    label="Senha"
-                                    type="password"
-                                    placeholder="Digite sua senha"
-                                    fullWidth
-                                    className="mt-2"
-                                />
-                            </div>
-                            <Button
-                                type="submit"
-                                color="primary"
-                                size="lg"
-                                variant="shadow"
-                                description="Entrar"
-                            />
-                        </form>
+                        <FormAuth company={company.name} />
                     </div>
                 </div>
             </div>

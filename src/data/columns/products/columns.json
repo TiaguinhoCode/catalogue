@@ -1,0 +1,8 @@
+[
+  { "name": "#", "uid": "#" },
+  { "name": "Nome", "uid": "nome" },
+  { "name": "ativo?", "uid": "ativo" },
+  { "name": "Promoção?", "uid": "Promocao" },
+  { "name": "Preço", "uid": "Preco" },
+  { "name": "Ação", "uid": "Acao" }
+]

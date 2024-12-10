@@ -3,7 +3,7 @@
 // Biblioteca
 import { motion } from 'framer-motion';
 
-export default function Plans() {
+export default function PlansPage() {
     return (
         <div className="w-full min-h-screen py-16">
             <div className="min-h-screen flex flex-col items-center justify-center">
