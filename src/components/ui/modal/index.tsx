@@ -18,7 +18,7 @@ export function Modal({ isOpen, title, onClose, children }: ModalProps) {
     return (
         <Mdl
             isOpen={isOpen}
-            onClose={onClose}
+            onOpenChange={onClose}
             aria-labelledby="modal"
             scrollBehavior="inside"
             placement="auto"

@@ -17,6 +17,7 @@ export function Input({ isSearch, ...rest }: InputProps) {
     if (isSearch) {
         return (
             <Input
+                {...rest}
                 classNames={{
                     base: "border border-gray-300 rounded-lg shadow-sm",
                     inputWrapper: "bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",
@@ -28,10 +29,12 @@ export function Input({ isSearch, ...rest }: InputProps) {
     }
 
     return (
-        <Inpt {...rest}
+        <Inpt
+            {...rest}
             classNames={{
                 base: "border border-gray-300 rounded-lg shadow-sm",
                 inputWrapper: "bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",
-            }} />
+            }}
+        />
     )
 }

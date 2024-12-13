@@ -42,7 +42,7 @@ export function FormAuth({ company }: { company: string }) {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    variant="bordered"
+                    // variant="bordered"
                     classNames={{ inputWrapper: "border-gray-300 group-data-[focus=true]:border-gray-500" }}
                     fullWidth
                     className="mt-2"
@@ -51,7 +51,6 @@ export function FormAuth({ company }: { company: string }) {
             <div>
                 <Input
                     label="Senha"
-                    variant="bordered"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type={isVisible ? "text" : "password"}
@@ -70,11 +69,12 @@ export function FormAuth({ company }: { company: string }) {
                 />
             </div>
             <Button
+                className="w-full"
                 type="submit"
                 color="primary"
                 size="lg"
                 variant="shadow"
-                description="Entrar"
+                children="Entrar"
                 isLoading={loading}
             />
         </form>

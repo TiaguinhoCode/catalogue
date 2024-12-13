@@ -1,7 +1,7 @@
 // Componentes
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ListBox } from "@/components/ui/listBox";
+import { Loading } from "@/components/ui/loading";
 
 // React
 import { SyntheticEvent, useState } from "react";
@@ -9,24 +9,42 @@ import { SyntheticEvent, useState } from "react";
 // Bibliotecas
 import { setupApiClient } from "@/services/api";
 import { toast } from "react-toastify";
+import { FaPencil } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
+import { Tooltip } from "@nextui-org/react";
 
 // Next
 import { usePathname } from "next/navigation";
 
+// Utils
+import { SearchFilter } from "@/utils/filters/searchFilter";
+
 // Tipagem
 import { ItemsCategories } from "@/types/categories";
 interface ContainerModalProps {
-    categories: ItemsCategories[];
+    categoriesData: ItemsCategories[];
     api: ReturnType<typeof setupApiClient>;
 }
 
-export function ContainerModal({ categories, api }: ContainerModalProps) {
+export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [categories, setCategories] = useState(categoriesData)
     const [name, setName] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<ItemsCategories | null>(null);
+    const [searchParams, setSearchParams] = useState<string>('')
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     const company = usePathname().split("/")[1];
+
+    const fetchCategories = async () => {
+        try {
+            const resp = await api.get(`/v1/category?company=${company}`);
+            setCategories(resp.category);
+        } catch (err) {
+            toast.error("Erro ao carregar as categorias.");
+        }
+    };
 
     async function handleCreateCategory(e: SyntheticEvent) {
         e.preventDefault();
@@ -40,16 +58,53 @@ export function ContainerModal({ categories, api }: ContainerModalProps) {
         }
 
         try {
-            await api.post(`/v1/category?company=${company}`, { name });
-            toast.success("Categoria criada com sucesso!");
+            if (selectedCategory) {
+                await api.put(`/v1/category?company=${company}&id=${selectedCategory.id}`, { name });
+                toast.success("Categoria atualizada com sucesso!");
+            } else {
+                await api.post(`/v1/category?company=${company}`, { name });
+                toast.success("Categoria criada com sucesso!");
+            }
+
             setIsFormOpen(false);
             setError(false);
             setName("");
+
+            await fetchCategories()
         } catch (err) {
             toast.error("Erro ao criar a categoria. Tente novamente.");
         } finally {
             setLoading(false);
         }
+    }
+
+    async function handleEditCategory(category: ItemsCategories) {
+        setSelectedCategory(category); 
+        setName(category.name); 
+        setIsFormOpen(true); 
+    }
+
+    async function handleRemoveCategory(category: ItemsCategories) {
+        try {
+            setLoading(true)
+            await api.delete(`/v1/category?company=${company}&id=${category.id}`)
+            await fetchCategories()
+            toast.success("Categoria removida com sucesso!");
+        } catch (err) {
+            toast.error("Erro ao excluir a categorias.");
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const filterSearch = SearchFilter({ data: categories, search: searchParams })
+
+    if (loading) {
+        return (
+            <main className="min-h-[300px] h-full flex items-center justify-center">
+                <Loading />
+            </main>
+        );
     }
 
     return (
@@ -59,17 +114,51 @@ export function ContainerModal({ categories, api }: ContainerModalProps) {
                     }`}
             >
                 <Input
-                    isRequired
-                    errorMessage="Campo Obrigatório"
-                    isSearch
+                    value={searchParams}
+                    onChange={(e) => setSearchParams(e.target.value)}
+                    isSearch={true}
                     placeholder="Buscar categorias..."
                     className="mb-4"
                 />
-                <div className="w-full flex flex-col max-h-80 py-3 overflow-auto">
-                    <ListBox lists={categories} displayKey="name" />
-                </div>
+
+                {filterSearch.length > 0 ? (
+                    <div className="w-full flex flex-col max-h-80 py-3 overflow-y-auto overflow-x-hidden">
+                        {filterSearch.map((category) => (
+                            <div
+                                key={category.id}
+                                className="flex w-full items-center justify-between py-2 px-3 bg-gray-100 rounded mb-2 shadow-sm hover:shadow-md transition-all"
+                            >
+                                <div className="w-28 overflow-hidden text-ellipsis whitespace-nowrap">
+                                    <span className="truncate">{category.name}</span>
+                                </div>
+
+                                <div className="relative flex items-center gap-3">
+                                    <Tooltip placement="left-start" content="Editar Produto">
+                                        <button onClick={() => handleEditCategory(category)}  className="text-lg text-blue-500 cursor-pointer hover:text-blue-700 transition-all duration-300 ease-in-out active:opacity-70">
+                                            <FaPencil />
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip color="danger" placement="left-start" content="Excluir Produto">
+                                        <button onClick={() => handleRemoveCategory(category)} className="text-lg text-red-500 cursor-pointer hover:text-red-700 transition-all duration-300 ease-in-out active:opacity-70">
+                                            <FaTrashAlt />
+                                        </button>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex h-full items-center justify-center text-gray-500 text-sm italic py-10">
+                        Nenhuma categoria encontrada.
+                    </div>
+                )}
+
                 <Button
-                    onClick={() => setIsFormOpen(true)}
+                    onClick={() => {
+                        setIsFormOpen(true);
+                        setSelectedCategory(null);
+                        setName("");
+                    }}
                     className="w-full mt-4 transition-transform duration-300 ease-in-out hover:scale-105"
                     color="primary"
                     variant="solid"

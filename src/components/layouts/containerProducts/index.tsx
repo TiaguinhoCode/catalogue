@@ -34,7 +34,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
     const [products, setProducts] = useState(dataProducts)
     const [searchParams, setSearchParams] = useState<string>('')
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
     const api = setupApiClient(token)
 
@@ -68,8 +68,8 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
 
                 </div>
             </Container>
-            <Modal isOpen={isOpen} title="Categorias" onClose={onClose} >
-                <ContainerModal categories={categories} api={api} />
+            <Modal isOpen={isOpen} title="Categorias" onClose={onOpenChange} >
+                <ContainerModal categoriesData={categories} api={api} />
             </Modal>
         </>
     )
