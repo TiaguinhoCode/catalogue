@@ -23,7 +23,7 @@ export function ListBox<T>({ lists, displayKey }: ListBoxProps<T>) {
             }}
         >
             {lists.map((item, index) => (
-                <ListboxItem key={index}>
+                <ListboxItem textValue="lista" key={index}>
                     <div className="flex items-center gap-2">
                         <span>{String(item[displayKey])}</span>
                     </div>

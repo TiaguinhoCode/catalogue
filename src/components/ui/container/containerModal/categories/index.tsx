@@ -79,9 +79,9 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
     }
 
     async function handleEditCategory(category: ItemsCategories) {
-        setSelectedCategory(category); 
-        setName(category.name); 
-        setIsFormOpen(true); 
+        setSelectedCategory(category);
+        setName(category.name);
+        setIsFormOpen(true);
     }
 
     async function handleRemoveCategory(category: ItemsCategories) {
@@ -114,6 +114,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                     }`}
             >
                 <Input
+                    aria-label="Filtro de pesquisa"
                     value={searchParams}
                     onChange={(e) => setSearchParams(e.target.value)}
                     isSearch={true}
@@ -133,12 +134,12 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                                 </div>
 
                                 <div className="relative flex items-center gap-3">
-                                    <Tooltip placement="left-start" content="Editar Produto">
-                                        <button onClick={() => handleEditCategory(category)}  className="text-lg text-blue-500 cursor-pointer hover:text-blue-700 transition-all duration-300 ease-in-out active:opacity-70">
+                                    <Tooltip aria-label="Editar produto" placement="left-start" content="Editar Produto">
+                                        <button onClick={() => handleEditCategory(category)} className="text-lg text-blue-500 cursor-pointer hover:text-blue-700 transition-all duration-300 ease-in-out active:opacity-70">
                                             <FaPencil />
                                         </button>
                                     </Tooltip>
-                                    <Tooltip color="danger" placement="left-start" content="Excluir Produto">
+                                    <Tooltip aria-label="Excluir produto" color="danger" placement="left-start" content="Excluir Produto">
                                         <button onClick={() => handleRemoveCategory(category)} className="text-lg text-red-500 cursor-pointer hover:text-red-700 transition-all duration-300 ease-in-out active:opacity-70">
                                             <FaTrashAlt />
                                         </button>
@@ -159,6 +160,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                         setSelectedCategory(null);
                         setName("");
                     }}
+                    aria-label="Adicionar categoria"
                     className="w-full mt-4 transition-transform duration-300 ease-in-out hover:scale-105"
                     color="primary"
                     variant="solid"
@@ -174,6 +176,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                     }`}
             >
                 <Input
+                    aria-label="Nome da categoria"
                     value={name}
                     onChange={(e) => {
                         setName(e.target.value);
@@ -186,6 +189,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                 />
                 <div className="flex items-center justify-between mt-4">
                     <Button
+                        aria-label="Salvar"
                         type="submit"
                         disabled={loading}
                         isLoading={loading}
@@ -196,6 +200,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                         Salvar
                     </Button>
                     <Button
+                        aria-label="Cancelar"
                         onClick={() => setIsFormOpen(false)}
                         type="button"
                         disabled={loading}

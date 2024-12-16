@@ -1,5 +1,5 @@
 [
-  { "name": "#", "uid": "#" },
+  { "name": "Imagem", "uid": "imagem" },
   { "name": "Nome", "uid": "nome" },
   { "name": "ativo?", "uid": "ativo" },
   { "name": "Promoção?", "uid": "Promocao" },

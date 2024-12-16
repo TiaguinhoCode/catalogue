@@ -4,20 +4,41 @@
 import { formatCurrency } from "@/utils/mask/money";
 
 // Bibliotecas
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { Tooltip } from "@nextui-org/react";
+import { Avatar, AvatarGroup, Tooltip, User } from "@nextui-org/react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import { MdImageNotSupported } from "react-icons/md";
 
 // Tipagem
 import { ItemsProducts } from "@/types/products";
 
 export const renderCell = (item: ItemsProducts, columnKey: string) => {
     switch (columnKey) {
-        case "#":
+        case "imagem":
+            const imageUrls =
+                Array.isArray(item.Banner) && item.Banner.length > 0
+                    ? item.Banner.map(banner => banner.image_url)
+                    : [];
+            const maxVisibleAvatars = 3; // Limite de avatares visíveis
+
             return (
-                <div className="flex items-center justify-center">
-                    <BsThreeDotsVertical className="text-gray-500 hover:text-blue-600 cursor-pointer transition-colors duration-300 ease-in-out" />
-                </div>
+                <AvatarGroup radius="lg">
+                    {imageUrls.length > 0 ? (
+                        <>
+                            {imageUrls.slice(0, maxVisibleAvatars).map((url, index) => (
+                                <Avatar key={index} src={url} />
+                            ))}
+                            {imageUrls.length > maxVisibleAvatars && (
+                                <Avatar>
+                                    <span className="text-sm font-bold">
+                                        +{imageUrls.length - maxVisibleAvatars}
+                                    </span>
+                                </Avatar>
+                            )}
+                        </>
+                    ) : (
+                        <Avatar icon={<MdImageNotSupported />} />
+                    )}
+                </AvatarGroup>
             );
         case "nome":
             return <span className="font-medium">{item.name}</span>;

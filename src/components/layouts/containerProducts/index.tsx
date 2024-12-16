@@ -21,6 +21,9 @@ import columns from "@/data/columns/products/columns.json"
 import { ItemsCategories } from "@/types/categories";
 import { ItemsProducts } from "@/types/products";
 
+// Utils
+import { SearchFilter } from "@/utils/filters/searchFilter";
+
 // React
 import { useState } from "react";
 
@@ -36,6 +39,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
+    const filterSearch = SearchFilter({ data: products, search: searchParams })
     const api = setupApiClient(token)
 
     return (
@@ -50,6 +54,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
                         </div>
                         <div className="border-b my-2 border-gray-300"></div>
                         <Button
+                            aria-label="Adicionar Categoria"
                             onClick={onOpen}
                             className='w-full'
                             color="primary"
@@ -63,7 +68,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
                     <div className="border-r border-gray-300"></div>
 
                     <main className="flex-1 w-full p-4">
-                        <Table data={products} collumns={columns} renderCell={renderCell} />
+                        <Table data={filterSearch} collumns={columns} renderCell={renderCell} alert="O produto não foi encontrado."/>
                     </main>
 
                 </div>
