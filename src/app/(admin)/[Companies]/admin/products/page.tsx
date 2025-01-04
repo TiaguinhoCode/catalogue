@@ -65,7 +65,6 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
                 </div>
             </Container>
             <ContainerProducts categories={categoryResponse.category} dataProducts={productsResponse.products} token={token} />
-
         </div>
     );
 }

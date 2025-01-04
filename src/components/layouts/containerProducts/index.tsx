@@ -31,6 +31,7 @@ import { usePathname } from "next/navigation";
 // Tipagem
 import { ItemsCategories } from "@/types/categories";
 import { ItemsProducts } from "@/types/products";
+import exportToExcel from "@/utils/relatory/excel/products";
 
 interface ContainerProductsProps {
     categories: ItemsCategories[]
@@ -85,11 +86,15 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
     const filteredProducts = SearchFilter({
         data: products.filter((product) =>
             selectedCategories.length > 0
-                ? selectedCategories.includes(product.category.id) // Filtrar por categorias selecionadas
+                ? selectedCategories.includes(product.category.id)
                 : true
         ),
         search: searchParams,
     });
+
+    const handleExportToExcel = () => {
+        exportToExcel(products, 'RelatorioProdutos');
+    };
 
     return (
         <main className="w-full flex flex-row items-start justify-between gap-4 ">
@@ -123,6 +128,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
                         setSearch={setSearchParams}
                         refresh={handleRefresh}
                         clearFilter={() => setSelectedCategories([])}
+                        exportToExcel={handleExportToExcel}
                     />
                     <div className="mt-4">
                         <Table data={filteredProducts} handleRemove={handleRemove} createPromotion={handleCreatePromotion} loading={loading} collumns={columns} renderCell={renderCell} alert="O produto não foi encontrado." />

@@ -21,9 +21,10 @@ interface ToolBarProps {
     refresh: () => void;
     clearFilter: () => void;
     filter?: () => void;
+    exportToExcel?: () => void
 }
 
-export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, clearFilter, filter }: ToolBarProps) {
+export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, clearFilter, filter, exportToExcel }: ToolBarProps) {
     return (
         <div className="flex flex-wrap items-center justify-between gap-4 p-2">
             <div className="flex-1 w-full sm:w-auto">
@@ -83,6 +84,8 @@ export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, cle
                         </DropdownItem>
                         <DropdownItem
                             key="exportExcel"
+                            onClick={exportToExcel}
+                            className={`${!exportToExcel && 'hidden'}`}
                             startContent={<RiFileExcel2Line className="text-xl text-green-700 pointer-events-none flex-shrink-0" />}
                         >
                             Exportar para Excel
