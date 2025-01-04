@@ -8,7 +8,7 @@ import { ProductForm } from "@/components/layouts/forms/createProducts";
 import { cookies } from "next/headers";
 import { formatCurrency } from '@/utils/mask/money';
 
-export default async function EditProductsPage({ params }: { params: { id: string } }) {
+export default async function EditProductsPage({ params }: { params: Promise<{ id: string }> }) {
     const cookieStore = await cookies();
     const token = cookieStore.get('@nextauth.token')?.value;
     const company = cookieStore.get('@nextcompany.name')?.value;
