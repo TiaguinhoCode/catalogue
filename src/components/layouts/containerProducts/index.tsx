@@ -8,24 +8,29 @@ import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import { renderCell } from "@/components/renderCell/products";
 import { Modal } from "@/components/ui/modal";
-import { ContainerModal } from "@/components/ui/container/containerModal/categories";
+import { ContainerModal as ModalCategories } from "@/components/ui/container/containerModal/categories";
+import { ContainerModal as ModalProducts } from "@/components/ui/container/containerModal/productPromotion";
 
 // Bibliotecas
 import { useDisclosure } from "@nextui-org/react";
 import { setupApiClient } from "@/services/api";
+import { toast } from "react-toastify";
 
 // Dados
 import columns from "@/data/columns/products/columns.json"
-
-// Tipagem
-import { ItemsCategories } from "@/types/categories";
-import { ItemsProducts } from "@/types/products";
 
 // Utils
 import { SearchFilter } from "@/utils/filters/searchFilter";
 
 // React
 import { useState } from "react";
+
+// Next
+import { usePathname } from "next/navigation";
+
+// Tipagem
+import { ItemsCategories } from "@/types/categories";
+import { ItemsProducts } from "@/types/products";
 
 interface ContainerProductsProps {
     categories: ItemsCategories[]
@@ -35,28 +40,70 @@ interface ContainerProductsProps {
 
 export function ContainerProducts({ categories, dataProducts, token }: ContainerProductsProps) {
     const [products, setProducts] = useState(dataProducts)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [loadingSelecting, setLoadingSelecting] = useState<boolean>(false)
+    const [promotion, setPromotion] = useState<boolean>(false)
+    const [selectingProduct, setSelectingProduct] = useState()
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [searchParams, setSearchParams] = useState<string>('')
 
-    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const filterSearch = SearchFilter({ data: products, search: searchParams })
+    const company = usePathname().split("/")[1];
     const api = setupApiClient(token)
 
+    async function handleRefresh() {
+        setLoading(true)
+
+        const resp = await api.get(`/v1/products?company=${company}`)
+        setProducts(resp.products)
+
+        setLoading(false)
+    }
+
+    async function handleRemove(id: string) {
+        try {
+            await api.delete(`/v1/products?id=${id}&company=${company}`)
+            toast.success("Produto Removido com sucesso!")
+
+            handleRefresh()
+        } catch (err) {
+            toast.error("Erro ao remover o produto!")
+        }
+    }
+
+    async function handleCreatePromotion(id: string) {
+        setLoadingSelecting(true)
+        setPromotion(true)
+        onOpen()
+
+        const products = await api.get(`/v1/products?company=${company}&id=${id}`)
+        setSelectingProduct(products.products)
+        setLoadingSelecting(false)
+    }
+
+    const filteredProducts = SearchFilter({
+        data: products.filter((product) =>
+            selectedCategories.length > 0
+                ? selectedCategories.includes(product.category.id) // Filtrar por categorias selecionadas
+                : true
+        ),
+        search: searchParams,
+    });
+
     return (
-        <>
-            <Container>
-                <ToolBar search={searchParams} setSearch={setSearchParams} />
-                <div className="flex flex-col lg:flex-row gap-6 py-2">
-                    <aside className="p-4 ">
+        <main className="w-full flex flex-row items-start justify-between gap-4 ">
+            <div className="w-1/5">
+                <Container>
+                    <aside className="w-full">
                         <h3 className="text-lg font-semibold text-gray-800 mb-4">Categorias</h3>
-                        <div className="h-64 overflow-auto">
-                            <ListBox lists={categories} displayKey="name" />
+                        <div className="max-h-[400px] h-full overflow-auto border rounded-md p-2">
+                            <ListBox lists={categories} displayKey="name" selectedKeys={selectedCategories} setSelectedKeys={setSelectedCategories} />
                         </div>
-                        <div className="border-b my-2 border-gray-300"></div>
                         <Button
                             aria-label="Adicionar Categoria"
-                            onClick={onOpen}
-                            className='w-full'
+                            onClick={() => { setPromotion(false); onOpen(); }}
+                            className="w-full mt-4"
                             color="primary"
                             variant="ghost"
                             size="md"
@@ -64,18 +111,28 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
                             Adicionar Categoria
                         </Button>
                     </aside>
+                </Container>
+            </div>
 
-                    <div className="border-r border-gray-300"></div>
+            <div className="w-4/5">
+                <Container>
+                    <ToolBar
+                        search={searchParams}
+                        hrefe={`/${company}/admin/products/create`}
+                        descriptionBtn="Adicionar Produto"
+                        setSearch={setSearchParams}
+                        refresh={handleRefresh}
+                        clearFilter={() => setSelectedCategories([])}
+                    />
+                    <div className="mt-4">
+                        <Table data={filteredProducts} handleRemove={handleRemove} createPromotion={handleCreatePromotion} loading={loading} collumns={columns} renderCell={renderCell} alert="O produto não foi encontrado." />
+                    </div>
+                </Container>
+            </div>
 
-                    <main className="flex-1 w-full p-4">
-                        <Table data={filterSearch} collumns={columns} renderCell={renderCell} alert="O produto não foi encontrado."/>
-                    </main>
-
-                </div>
-            </Container>
-            <Modal isOpen={isOpen} title="Categorias" onClose={onOpenChange} >
-                <ContainerModal categoriesData={categories} api={api} />
+            <Modal isOpen={isOpen} title={promotion ? "Promoção" : "Categorias"} onClose={onOpenChange}>
+                {promotion ? <ModalProducts loadingSelecting={loadingSelecting} productsData={selectingProduct} api={api} refresh={handleRefresh} /> : <ModalCategories categoriesData={categories} api={api} />}
             </Modal>
-        </>
+        </main>
     )
 }

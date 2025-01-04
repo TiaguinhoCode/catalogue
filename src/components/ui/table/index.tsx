@@ -1,5 +1,8 @@
 'use client';
 
+// Utils
+import { InfiniteScroll } from "@/utils/InfiniteScroll";
+
 // biblioteca
 import {
     TableBody,
@@ -10,6 +13,15 @@ import {
     Table as TBL,
 } from "@nextui-org/react";
 
+// React
+import { useState } from "react";
+
+// Componentes
+import { Loading } from "../loading";
+
+// Next
+import { usePathname } from "next/navigation";
+
 // Tipagem
 type ItemsCollumns = {
     name: string;
@@ -19,42 +31,67 @@ type ItemsCollumns = {
 interface TableProps<T> {
     collumns: ItemsCollumns[];
     data: T[];
+    loading: boolean;
     alert?: string;
-    renderCell: (item: T, columnUid: string) => React.ReactNode;
+    handleRemove: (id: string) => void;
+    createPromotion?: (id: string) => void;
+    renderCell: (item: T, columnUid: string, company: string, handleRemove: (id: string) => void, createPromotion?: (id: string) => void) => React.ReactNode;
 }
 
-export function Table<T>({ collumns, data, alert, renderCell }: TableProps<T>) {
+export function Table<T>({ collumns, data, loading, alert, handleRemove, createPromotion, renderCell }: TableProps<T>) {
+    const [limit, setLimit] = useState(0)
+
+    const company = usePathname().split("/")[1];
+
+    const fetchMore = () => {
+        if (limit < data.length) {
+            setLimit(limit + 5);
+        }
+    };
+
+    const dataLimit = data.slice(0, limit)
+
+    if (loading) {
+        return (
+            <main className="w-full items-center justify-center h-[450px]">
+                <Loading />
+            </main>
+        )
+    }
 
     return (
-        <TBL
-            aria-label="tabela"
-            classNames={{
-                wrapper: "border-none shadow-none overflow-auto max-h-[500px] max-w-full", // Scroll horizontal
-                table: "min-w-full border-collapse overflow-hidden text-left",
-                th: "bg-blue-500 text-white font-semibold uppercase text-sm px-4 py-2 sticky top-0 z-10",
-                tr: "hover:bg-blue-50 rounded-md transition-all duration-200 border-b border-gray-200",
-                td: "px-4 py-2 text-gray-800 text-sm whitespace-nowrap",
-            }}
-        >
-            <TableHeader>
-                {collumns.map((column) =>
-                    <TableColumn key={column.uid} align="center">{column.name}</TableColumn>
-                )}
-            </TableHeader>
-            <TableBody
-                emptyContent={<span className="text-gray-500 italic">{alert ? alert : "Nenhum dado disponível."}</span>}
-                items={data}
+        <main className="w-full z-0 max-h-[450px] h-full overflow-auto">
+            <TBL
+                classNames={{
+                    wrapper: "rounded-lg shadow-lg bg-white p-1 overflow-hidden",
+                    base: "rounded-lg",
+                }}
+                aria-label="Tabela aprimorada"
+                isStriped
             >
-                {(item) => (
-                    <TableRow key={(item as any).id}>
-                        {collumns.map((column) => (
-                            <TableCell key={column.uid}>
-                                {renderCell(item, column.uid)}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                )}
-            </TableBody>
-        </TBL>
+                <TableHeader columns={collumns}>
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            className="bg-blue-500 text-white uppercase"
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody emptyContent={alert ? alert : "Nenhum dado foi encontrado 😞 "} items={dataLimit}>
+                    {(item) => (
+                        <TableRow key={(item as any).id}>
+                            {collumns.map((column) => (
+                                <TableCell key={column.uid}>
+                                    {renderCell(item, column.uid, company, handleRemove, createPromotion)}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </TBL>
+            <InfiniteScroll fetchMore={fetchMore} />
+        </main>
     );
 }

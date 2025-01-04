@@ -1,5 +1,8 @@
 // Biblioteca
 import { FaFilter, FaPlus, FaSync } from "react-icons/fa";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import { MdFilterAltOff } from "react-icons/md";
 
 // Componentes
 import { Input } from "../input";
@@ -7,48 +10,85 @@ import { Button } from "../button";
 
 // Next
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { RiFileExcel2Line } from "react-icons/ri";
 
 // Tipagem 
 interface ToolBarProps {
     search: string;
-    setSearch: (value: string) => void
+    hrefe: string;
+    descriptionBtn: string;
+    setSearch: (value: string) => void;
+    refresh: () => void;
+    clearFilter: () => void;
+    filter?: () => void;
 }
 
-export function ToolBar({ search, setSearch }: ToolBarProps) {
-    const company = usePathname().split("/")[1];
-
+export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, clearFilter, filter }: ToolBarProps) {
     return (
-        <div className="flex flex-wrap items-center justify-between ">
-            <div className="flex items-center w-full sm:w-1/2 lg:w-1/3 mb-4 sm:mb-0">
-                <Input isSearch={true} value={search} onChange={(e) => setSearch(e.target.value)} className="w-full" />
+        <div className="flex flex-wrap items-center justify-between gap-4 p-2">
+            <div className="flex-1 w-full sm:w-auto">
+                <Input
+                    variant="bordered"
+                    isSearch={true}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Pesquisar produtos..."
+                    className="w-full sm:w-[300px] border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                />
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
                 <button
-                    className="flex items-center justify-center p-3 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 focus:outline-none transition-transform transform hover:scale-105"
+                    className={`${!filter && 'hidden'} flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 focus:outline-none transition-transform transform hover:scale-105`}
                     title="Filtrar produtos"
                 >
-                    <FaFilter size={16} />
+                    <FaFilter className="text-lg" />
                 </button>
 
                 <Button
+                    onClick={refresh}
                     aria-label="Recarregar"
-                    className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none transition-transform transform hover:scale-105"
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none transition-transform transform hover:scale-105"
                 >
-                    <FaSync size={18} />
+                    <FaSync className="text-lg" />
                     Recarregar
                 </Button>
 
-                <Link href={`/${company}/admin/products/create`}>
+                <Link href={hrefe}>
                     <Button
                         aria-label="Adicionar produto"
-                        className="flex items-center gap-2 px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none transition-transform transform hover:scale-105"
+                        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none transition-transform transform hover:scale-105"
                     >
-                        <FaPlus size={18} />
-                        Adicionar Produto
+                        <FaPlus className="text-lg" />
+                        {descriptionBtn}
                     </Button>
                 </Link>
+
+                <Dropdown>
+                    <DropdownTrigger>
+                        <button
+                            className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full shadow-md hover:bg-gray-200 focus:outline-none transition-transform transform hover:scale-110"
+                            title="Opções adicionais"
+                        >
+                            <BiDotsVerticalRounded className="text-2xl text-gray-600" />
+                        </button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Opções do menu">
+                        <DropdownItem
+                            onClick={clearFilter}
+                            key="clearFilters"
+                            startContent={<MdFilterAltOff className="text-xl text-blue-500 pointer-events-none flex-shrink-0" />}
+                        >
+                            Remover Filtros
+                        </DropdownItem>
+                        <DropdownItem
+                            key="exportExcel"
+                            startContent={<RiFileExcel2Line className="text-xl text-green-700 pointer-events-none flex-shrink-0" />}
+                        >
+                            Exportar para Excel
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
             </div>
         </div>
     );

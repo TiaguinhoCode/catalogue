@@ -2,7 +2,6 @@
 import companiesData from '@/data/settings/companies.json';
 
 // Componente
-import { NotFound } from '@/components/notFound';
 import { Tabs } from '@/components/ui/tabs';
 import { Container } from '@/components/ui/container';
 import { ContainerProducts } from '@/components/layouts/containerProducts';
@@ -26,15 +25,11 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
     const cookieStore = await cookies();
     const token = cookieStore.get('@nextauth.token')?.value;
 
-    const api = setupApiClient()
+    const api = setupApiClient(token)
 
     const company = companiesData.find(
         (c) => c.name.toLowerCase() === Companies.toLowerCase()
     );
-
-    if (!company) {
-        return <NotFound />;
-    }
 
     const tabs = [
         {
@@ -55,27 +50,23 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
         },
     ];
 
-    const categoryResponse = await api.get(`/v1/category?company=${company.name}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const productsResponse = await api.get(`/v1/products?company=${company.name}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    })
+    const categoryResponse = await api.get(`/v1/category?company=${company?.name}`);
+    const productsResponse = await api.get(`/v1/products?company=${company?.name}`)
 
     return (
-        <>
-            <div className="flex flex-col">
-                <Container>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-6">
-                        Produtos
-                    </h2>
+        <div className="flex space-y-4 py-2 flex-col">
+
+            <Container>
+                <h2 className="text-gray-800 font-bold text-2xl">
+                    Produtos
+                </h2>
+                <div className="pt-2">
                     <Tabs tabs={tabs} />
-                </Container>
+                </div>
+            </Container>
+            <ContainerProducts categories={categoryResponse.category} dataProducts={productsResponse.products} token={token} />
 
-                <ContainerProducts categories={categoryResponse.category} dataProducts={productsResponse.products} token={token} />
-
-            </div>
-        </>
+        </div>
     );
 }
 

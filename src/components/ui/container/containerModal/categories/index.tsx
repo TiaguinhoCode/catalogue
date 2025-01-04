@@ -114,6 +114,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
                     }`}
             >
                 <Input
+                    variant="bordered"
                     aria-label="Filtro de pesquisa"
                     value={searchParams}
                     onChange={(e) => setSearchParams(e.target.value)}
@@ -177,6 +178,7 @@ export function ContainerModal({ categoriesData, api }: ContainerModalProps) {
             >
                 <Input
                     aria-label="Nome da categoria"
+                    variant="bordered"
                     value={name}
                     onChange={(e) => {
                         setName(e.target.value);

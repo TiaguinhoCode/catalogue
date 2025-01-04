@@ -18,14 +18,14 @@ interface TabsProps {
 
 export function Tabs({ tabs, onTabChange }: TabsProps) {
     return (
-        <div className="flex w-full flex-col max-w-4xl">
+        <div className="flex w-full flex-col ">
             <TBS
                 aria-label="Custom Tabs"
                 color="primary"
                 variant="underlined"
                 classNames={{
                     tabList: "flex justify-center",
-                    tab: "px-4 text-base font-medium text-gray-500 transition-all",
+                    tab: "text-base font-medium text-gray-500 transition-all",
                     tabContent: "group-data-[selected=true]:text-gray-700 group-data-[selected=true]:font-semibold",
                 }}
             >

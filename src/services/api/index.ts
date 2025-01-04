@@ -2,11 +2,20 @@ export function setupApiClient(ctx?: string) {
   async function apiFetch(endpoint: string, options: RequestInit = {}) {
     const baseUrl = "https://catalogsapi.vercel.app";
 
+    // Monta os headers de forma segura
+    const defaultHeaders: Record<string, string> = {
+      ...(ctx ? { Authorization: `Bearer ${ctx}` } : {}),
+    };
+
+    const isFormData = options.body instanceof FormData;
+
     const defaultOptions: RequestInit = {
-      headers: {
-        "Content-Type": "application/json",
-        ...(ctx ? { Authorization: `Bearer ${ctx}` } : {}),
-      },
+      headers: isFormData
+        ? defaultHeaders // Para FormData, não define "Content-Type"
+        : {
+            "Content-Type": "application/json",
+            ...defaultHeaders,
+          },
       ...options,
     };
 
@@ -30,7 +39,7 @@ export function setupApiClient(ctx?: string) {
     post: (endpoint: string, body: any) =>
       apiFetch(endpoint, {
         method: "POST",
-        body: JSON.stringify(body),
+        body: body instanceof FormData ? body : JSON.stringify(body),
       }),
     put: (endpoint: string, body: any) =>
       apiFetch(endpoint, {

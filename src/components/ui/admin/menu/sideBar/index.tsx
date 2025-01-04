@@ -4,17 +4,18 @@
 import { Dropdown, DropdownMenu, DropdownItem, DropdownTrigger, Tooltip } from "@nextui-org/react";
 import { FaUserAlt } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import { AiOutlineDashboard, AiOutlineProduct } from "react-icons/ai";
+import { AiOutlineDashboard } from "react-icons/ai";
 
 // React
 import { useContext } from "react";
 import { AuthContext } from '@/contexts/auth'
+
 // Imagem
 import slogan from "./../../../../../../public/slogan.png";
 
 // Next
 import Image from "next/image";
-import { ActiveLink } from "../activeLink";;
+import { ActiveLink } from "../activeLink";import { IoPricetagsOutline } from "react-icons/io5";
 
 // Tipagem
 interface SideBarProps {
@@ -27,17 +28,17 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
 
     const menuItems = [
         { label: "Dashboard", icon: <AiOutlineDashboard size={25} />, href: `/${companies}/admin` },
-        { label: "Produtos", icon: <AiOutlineProduct size={25} />, href: `/${companies}/admin/products` },
+        { label: "Produtos", icon: <IoPricetagsOutline size={25} />, href: `/${companies}/admin/products` },
     ];
 
     return (
         <div
             className={`fixed flex flex-col top-0 left-0 h-screen ${isExpanded ? "w-56" : "w-16"
-                } bg-gradient-to-br from-blue-700 to-blue-500 text-white shadow-lg transition-all duration-300`}
+                }  text-white transition-all duration-300`}
         >
 
             <div
-                className={`flex flex-col my-8 items-center justify-center h-20 ${isExpanded ? "" : ""
+                className={`flex flex-col items-center justify-center ${isExpanded ? "" : ""
                     }`}
             >
                 <Image
@@ -45,17 +46,11 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
                     alt="Logo Cataloguê"
                     quality={100}
                     priority
-                    className={isExpanded ? 'w-[90px]' : 'w-[120px]'}
+                    className={isExpanded ? 'w-[120px]' : 'w-[80px]'}
                 />
-                <span
-                    className={`text-lg font-bold ${isExpanded ? "block" : "hidden"
-                        } transition-all duration-300`}
-                >
-                    Cataloguê
-                </span>
             </div>
 
-            <ul className="flex-1 space-y-2 px-1">
+            <ul className="flex-1 py-3 space-y-2 px-1">
                 {menuItems.map((item, index) => (
                     <ActiveLink key={index} href={item.href}>
                         <Tooltip

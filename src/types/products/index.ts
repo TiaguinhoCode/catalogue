@@ -4,10 +4,11 @@ export type ItemsProducts = {
   description: string;
   is_active: boolean;
   category: {
+    id: string;
     name: string;
   };
   price: string;
-  Banner: { image_url: string }[]; // Array de objetos com a propriedade "image_url"
+  Banner: { image_url: string }[]; 
   promotion: boolean;
   discount_percentage: string;
   discount_price: string;

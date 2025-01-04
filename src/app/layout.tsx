@@ -75,7 +75,7 @@ export default function RootLayout({
         <AuthProvider>
           <main className="w-full min-h-screen bg-[#f7f7f7]">
             <NextTopLoader
-              color="#2563eb"
+              color="#fff"
             />
             {children}
             <ToastContainer autoClose={3000} />

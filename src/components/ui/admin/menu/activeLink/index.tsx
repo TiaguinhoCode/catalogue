@@ -15,11 +15,17 @@ interface ActiveLinkProps {
 
 export function ActiveLink({ href, children }: ActiveLinkProps) {
     const pathname = usePathname();
-    const isActive = pathname === href;
+
+    const isActive =
+        pathname === href || 
+        pathname.startsWith(`${href}/create`) || 
+        pathname.startsWith(`${href}/edit`); 
 
     return (
         <Link
-            className={`flex items-center space-x-4 px-4 py-3 rounded-md cursor-pointer transition-all ${isActive ? "bg-white text-blue-700 font-bold" : "hover:bg-white hover:text-blue-700"}`}
+            className={`flex items-center space-x-4 px-4 py-3 rounded-md cursor-pointer transition-all ${
+                isActive ? "bg-white text-blue-700 font-bold" : "hover:bg-white hover:text-blue-700"
+            }`}
             href={href}
         >
             {children}

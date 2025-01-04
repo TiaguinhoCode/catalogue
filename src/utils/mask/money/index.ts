@@ -1,16 +1,17 @@
 export function formatCurrency(value: string): string {
-  const numericValue = parseFloat(value.replace(/[^\d.-]/g, ""));
+  let numericValue = parseFloat(value.replace(",", "."));
 
-  const options: Intl.NumberFormatOptions = {
+  if (isNaN(numericValue)) return "R$ 0,00";
+
+  return numericValue.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  };
+  });
+}
 
-  if (isNaN(numericValue)) {
-    return "R$ 0,00";
-  }
 
-  return numericValue.toLocaleString("pt-BR", options);
+export function parseCurrency(value: string): number {
+  return parseFloat(value.replace(/[^0-9,-]+/g, "").replace(",", ".")) || 0;
 }
