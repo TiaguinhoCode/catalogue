@@ -30,11 +30,9 @@ export function Input({ isSearch, ...rest }: InputProps) {
 
     return (
         <Inpt
-            className=''
             {...rest}
             classNames={{
-                base: "",
-                // inputWrapper: "bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",
+                base: "cursor-not-allowed",
                 inputWrapper: "rounded-lg border-1 border-gray-300 data-[hover=true]:border-gray-400 group-data-[focus=true]:border-blue-500",
             }}
         />

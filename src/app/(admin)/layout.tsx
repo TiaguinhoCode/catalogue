@@ -22,4 +22,4 @@ export default async function AdminRouter({ children }: { children: ReactNode })
             {children}
         </Layout>
     )
-}
+}   

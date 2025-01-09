@@ -5,14 +5,12 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import Cookies from "js-cookie";
 
 // React
-import { useState } from "react";
 
 // Biblioteca
 import { toast } from "react-toastify";
 import { setupApiClient } from "@/services/api";
 
 // Utils
-import { getToken } from "@/utils/getToken";
 
 // Next
 import { usePathname } from "next/navigation";

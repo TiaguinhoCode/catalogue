@@ -5,15 +5,16 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/auth";
 
 // Bibliotecas
-import { FaCloud, FaUserAlt } from "react-icons/fa";
+import { FaCloud } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { HiOutlineCog } from "react-icons/hi";
 import { MdNotifications } from "react-icons/md";
 import { CgMenuRight } from "react-icons/cg";
 
 // Next
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 // Tipagem
 interface HeaderBarProps {
@@ -27,7 +28,6 @@ export function HeaderBar({ setIsExpanded }: HeaderBarProps) {
     const [currentDate, setCurrentDate] = useState<string>("");
 
     useEffect(() => {
-        // Formatar a data de hoje
         const options: Intl.DateTimeFormatOptions = {
             weekday: 'long',
             day: 'numeric',
@@ -94,8 +94,8 @@ export function HeaderBar({ setIsExpanded }: HeaderBarProps) {
                     <Dropdown classNames={{ trigger: "p-2 rounded-full hover:bg-gray-200 transition" }} aria-label="User Actions">
                         <DropdownTrigger>
                             <div className="flex items-center space-x-2 cursor-pointer rounded-lg p-2 transition-all duration-200">
-                                <div className="p-2 rounded-full bg-blue-500 flex items-center justify-center">
-                                    <FaUserAlt size={15} className="text-white" />
+                                <div className="flex items-center justify-center">
+                                    <Avatar src={user?.photo} alt="Foto do usuário" as="button" className="transition-transform" classNames={{ base: "w-8 h-8 relative overflow-hidden bg-blue-500 text-white" }} />
                                 </div>
                                 <div className="flex flex-col transition-opacity duration-200">
                                     <p className="text-sm font-bold text-gray-700">
@@ -118,7 +118,7 @@ export function HeaderBar({ setIsExpanded }: HeaderBarProps) {
                                 </div>
                             </DropdownItem>
 
-                            <DropdownItem key="configurations" className="py-2 hover:bg-gray-100">
+                            <DropdownItem key="configurations" href={`/${router.split("/")[1]}/admin/settings/profile`} className="py-2 hover:bg-gray-100">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-sm text-gray-700">Configurações</span>
                                 </div>
@@ -136,9 +136,9 @@ export function HeaderBar({ setIsExpanded }: HeaderBarProps) {
                         </DropdownMenu>
                     </Dropdown>
 
-                    <button className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition duration-200 shadow-lg">
-                        <HiOutlineCog className="text-2xl text-gray-700" /> 
-                    </button>
+                    <Link href={`/${router.split("/")[1]}/admin/settings/profile`} className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition duration-200 shadow-lg">
+                        <HiOutlineCog className="text-2xl text-gray-700" />
+                    </Link>
                     <button className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition duration-200 shadow-lg">
                         <MdNotifications className="text-2xl text-gray-700" />
                     </button>

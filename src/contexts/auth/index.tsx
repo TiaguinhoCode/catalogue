@@ -11,6 +11,7 @@ import { setupApiClient } from '@/services/api';
 import { toast } from 'react-toastify';
 
 // Tipagem
+import { ItemsUser } from '@/types/users';
 type SignInProps = {
     email: string;
     password: string;
@@ -18,24 +19,16 @@ type SignInProps = {
 };
 
 type AuthContextData = {
-    user: User | null;
+    user: ItemsUser | null;
     signIn: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
-};
-
-type User = {
-    name: string;
-    surname: string;
-    email: string;
-    photo: string;
-    role: string;
 };
 
 // Contexto
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<ItemsUser | null>(null);
     const router = useRouter();
     const api = setupApiClient();
 

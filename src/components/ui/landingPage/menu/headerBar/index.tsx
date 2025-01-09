@@ -6,7 +6,7 @@ import slogan from "./../../../../../../public/slogan.png";
 // Next
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Para pegar o caminho atual
+import { usePathname } from "next/navigation";
 
 // Biblioteca
 import {
@@ -20,8 +20,14 @@ import {
     NavbarMenuToggle,
 } from "@nextui-org/react";
 
-export function HeaderBar() {
-    const pathname = usePathname(); 
+// Tipagem
+interface HeaderBarProps {
+    token?: string;
+    company?: string;
+}
+
+export function HeaderBar({ token, company }: HeaderBarProps) {
+    const pathname = usePathname();
 
     return (
         <Navbar
@@ -78,21 +84,33 @@ export function HeaderBar() {
                     </Link>
                 </NavbarItem>
             </NavbarContent>
-            
+
             <NavbarContent justify="end" className="items-center hidden sm:flex">
                 <NavbarItem>
-                    <Button
-                        as="a"
-                        target="_blank"
-                        href="https://wa.me/5585987805592/?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20seu%20sistema%20e%20as%20informações%20disponíveis."
-                        color="primary"
-                        variant="ghost"
-                        className="hover:font-semibold transition-transform duration-300 transform hover:scale-105"
-                    >
-                        Chamar no WhatsApp
-                    </Button>
+                    {token && company ? (
+                        <Link
+                            href={`${company}/admin`}
+                            className="px-4 py-2 rounded-md bg-blue-500 text-white font-semibold shadow-md transition-transform duration-300 transform hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            aria-label="Acessar o sistema"
+                        >
+                            Acessar o sistema
+                        </Link>
+                    ) : (
+                        <Button
+                            as="a"
+                            target="_blank"
+                            href="https://wa.me/5585987805592/?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20seu%20sistema%20e%20as%20informações%20disponíveis."
+                            color="primary"
+                            variant="ghost"
+                            className="hover:font-semibold transition-transform duration-300 transform hover:scale-105"
+                        >
+                            Chamar no WhatsApp
+                        </Button>
+                    )}
                 </NavbarItem>
+
             </NavbarContent>
+
         </Navbar>
     );
 }
