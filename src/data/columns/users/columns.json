@@ -1,0 +1,9 @@
+[
+  { "name": "Imagem", "uid": "imagem" },
+  { "name": "Nome", "uid": "nome" },
+  { "name": "Telefone", "uid": "telefone" },
+  { "name": "Cep", "uid": "cep" },
+  { "name": "Permissão", "uid": "regra" },
+  { "name": "Status", "uid": "status" },
+  { "name": "Ação", "uid": "acao" }
+]

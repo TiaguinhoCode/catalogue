@@ -1,5 +1,4 @@
 // Componentes
-import { SettingsMenu } from "@/components/ui/subMenu/settings";
 import { ContainerProfiles } from "@/components/layouts/profiles";
 
 // Next
@@ -15,14 +14,6 @@ export default async function SettingsPage() {
     const user = await api.get(`/v1/me?company=${company}`)
 
     return (
-        <main className="w-full flex flex-col md:flex-row md:space-x-6 ">
-            <aside className="w-full md:w-1/4">
-                <SettingsMenu />
-            </aside>
-
-            <section className="w-full md:w-3/4 ">
-                <ContainerProfiles user={user.user}/>
-            </section>
-        </main>
+        <ContainerProfiles user={user.user} />
     );
 }
