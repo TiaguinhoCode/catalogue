@@ -17,6 +17,7 @@ import slogan from "./../../../../../../public/slogan.png";
 // Next
 import Image from "next/image";
 import { ActiveLink } from "../activeLink";
+import { usePathname } from "next/navigation";
 
 // Tipagem
 interface SideBarProps {
@@ -30,7 +31,7 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
     const menuItems = [
         { label: "Dashboard", icon: <AiOutlineDashboard size={25} />, href: `/${companies}/admin` },
         { label: "Produtos", icon: <IoPricetagsOutline size={25} />, href: `/${companies}/admin/products` },
-        { label: "Configuração", icon: <IoSettingsOutline size={25} />, href: `/${companies}/admin/settings/profile` },
+        { label: "Configuração", icon: <IoSettingsOutline size={25} />, href: `/${companies}/admin/settings` },
     ];
 
     return (

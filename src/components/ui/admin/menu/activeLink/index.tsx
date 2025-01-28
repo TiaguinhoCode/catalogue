@@ -19,7 +19,9 @@ export function ActiveLink({ href, children }: ActiveLinkProps) {
     const isActive =
         pathname === href || 
         pathname.startsWith(`${href}/create`) || 
-        pathname.startsWith(`${href}/edit`); 
+        pathname.startsWith(`${href}/edit`) ||
+        pathname.startsWith(`${href}/profile`) ||
+        pathname.startsWith(`${href}/users`)
 
     return (
         <Link

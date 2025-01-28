@@ -13,7 +13,6 @@ export default async function UsersPage() {
     const company = cookieStore.get('@nextcompany.name')?.value;
 
     const api = setupApiClient(token)
-
     const usersResponse = await api.get(`/v1/users?company=${company}`)
 
     return (

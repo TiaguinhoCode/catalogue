@@ -6,64 +6,67 @@ import Link from "next/link";
 
 // Componentes
 import { Container } from "../../container";
-import { FaBell, FaLock, FaUser, FaUsers } from "react-icons/fa";
+import { FaBell, FaCreditCard, FaLock, FaUser, FaUsers } from "react-icons/fa";
+
+// React
+import { useEffect, useState } from "react";
 
 export function SettingsMenu() {
     const pathname = usePathname();
+    const company = usePathname().split('/')[1];
 
-    const isActive = (href: string) => pathname === href;
+    const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/create`);
+
+    const menuItems = [
+        {
+            href: `/${pathname ? company : ''}/admin/settings`,
+            icon: <FaUser />,
+            label: "Minha conta"
+        },
+        {
+            href: `/${pathname ? company : ''}/admin/settings/users`,
+            icon: <FaUsers />,
+            label: "Gerenciamento Funcionário"
+        },
+        {
+            href: `/${pathname ? company : ''}/admin/settings/notify`,
+            icon: <FaBell />,
+            label: "Notificação"
+        },
+        {
+            href: `/${pathname ? company : ''}/admin/settings/security`,
+            icon: <FaLock />,
+            label: "Segurança da conta"
+        },
+        {
+            href: `/${pathname ? company : ''}/admin/settings/signature`,
+            icon: <FaCreditCard />,
+            label: "Assinatura"
+        }
+    ];
 
     return (
         <Container>
-            <h4 className="text-gray-600 font-bold text-2xl border-b border-gray-200 pb-4 mb-6">
+            <h4 className="text-gray-600 font-bold text-2xl border-b border-gray-200 pb-2 mb-6">
                 Configurações
             </h4>
-            <section className="flex flex-col space-y-3">
-                <Link href={`/${pathname.split('/')[1]}/admin/settings/profile`}>
-                    <span
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive(`/${pathname.split('/')[1]}/admin/settings/profile`)
-                            ? 'bg-blue-100 text-blue-600 font-semibold'
-                            : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-500'
-                            }`}
-                    >
-                        <FaUser />
-                        <span>Minha conta</span>
-                    </span>
-                </Link>
-                <Link href={`/${pathname.split('/')[1]}/admin/settings/users`}>
-                    <span
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive(`/${pathname.split('/')[1]}/admin/settings/users`)
-                            ? 'bg-blue-100 text-blue-600 font-semibold'
-                            : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-500'
-                            }`}
-                    >
-                        <FaUsers />
-                        <span>Gerenciamento de usuário</span>
-                    </span>
-                </Link>
-                <Link href={`/${pathname.split('/')[1]}/admin/notify`}>
-                    <span
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive(`/${pathname.split('/')[1]}/admin/settings/notify`)
-                            ? 'bg-blue-100 text-blue-600 font-semibold'
-                            : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-500'
-                            }`}
-                    >
-                        <FaBell />
-                        <span>Notificação</span>
-                    </span>
-                </Link>
-                <Link href={`/${pathname.split('/')[1]}/admin/settings/security`}>
-                    <span
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive(`/${pathname.split('/')[1]}/admin/settings/security`)
-                            ? 'bg-blue-100 text-blue-600 font-semibold'
-                            : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-500'
-                            }`}
-                    >
-                        <FaLock />
-                        <span>Segurança da conta</span>
-                    </span>
-                </Link>
-            </section>
+            <nav className="flex flex-col space-y-3">
+                {menuItems.map((item, index) => (
+                    <Link key={index} href={item.href}>
+                        <p
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 
+                            ${isActive(item.href)
+                                    ? 'bg-blue-100 text-blue-600 font-semibold shadow'
+                                    : 'bg-gray-50 text-gray-700 hover:bg-blue-50 hover:text-blue-500'
+                                }`}
+                            aria-current={isActive(item.href) ? "page" : undefined}
+                        >
+                            <span className="text-lg">{item.icon}</span>
+                            <span>{item.label}</span>
+                        </p>
+                    </Link>
+                ))}
+            </nav>
         </Container>
-    )
+    );
 }

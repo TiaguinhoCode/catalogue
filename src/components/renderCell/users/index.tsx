@@ -10,7 +10,12 @@ import Link from "next/link";
 // Tipagem
 import { ItemsUser } from "@/types/users";
 
-export const renderCell = (item: ItemsUser, columnUid: string) => {
+export const renderCell = (
+    item: ItemsUser,
+    columnUid: string,
+    company?: string,
+    handleRemove?: (id: string) => void
+) => {
     switch (columnUid) {
         case "imagem":
             return <Avatar src={item.photo ? item.photo : ''} radius="md" />;
@@ -48,7 +53,7 @@ export const renderCell = (item: ItemsUser, columnUid: string) => {
 
                     <Tooltip color="danger" placement="left-start" content="Excluir Produto">
                         <button
-                            // onClick={() => handleRemove(item.id as string)}
+                            onClick={() => handleRemove && handleRemove(item.id as string)}
                             className="text-lg text-red-500 cursor-pointer hover:text-red-700 transition-all duration-300 ease-in-out active:opacity-70"
                         >
                             <FaTrashAlt size={18} />

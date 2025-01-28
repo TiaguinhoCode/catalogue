@@ -9,15 +9,14 @@ import React from "react";
 // Tipagem
 interface OptionsProps<T extends object> {
     data: T[];
-    dataKey: keyof T;
     label?: string;
     placeholder?: string;
-    setValue: (value: string) => void;
+    setValue?: (value: string) => void;
     isInvalid: boolean;
     value: string;
 }
 
-export function Options<T extends object>({ data, dataKey, label, placeholder, value, setValue, isInvalid }: OptionsProps<T>) {
+export function Options<T extends object>({ data, label, placeholder, value, setValue, isInvalid }: OptionsProps<T>) {
     return (
         <Autocomplete
             inputProps={{
@@ -27,12 +26,12 @@ export function Options<T extends object>({ data, dataKey, label, placeholder, v
             }}
             isInvalid={isInvalid}
             defaultItems={data}
-            label="Categoria do Produto: "
-            placeholder="Search an animal"
+            label={label}
+            placeholder={placeholder}
             labelPlacement="outside"
             selectedKey={value}
             variant="bordered"
-            onSelectionChange={(newKey) => setValue(newKey as string)}
+            onSelectionChange={(newKey) => setValue && setValue(newKey as string)}
         >
             {(item) => <AutocompleteItem key={(item as any).id}>{(item as any).name}</AutocompleteItem>}
         </Autocomplete>

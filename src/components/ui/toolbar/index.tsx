@@ -17,6 +17,7 @@ interface ToolBarProps {
     search: string;
     hrefe: string;
     descriptionBtn: string;
+    isDropdown?: boolean;
     setSearch: (value: string) => void;
     refresh: () => void;
     clearFilter: () => void;
@@ -24,7 +25,7 @@ interface ToolBarProps {
     exportToExcel?: () => void
 }
 
-export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, clearFilter, filter, exportToExcel }: ToolBarProps) {
+export function ToolBar({ search, hrefe, descriptionBtn, isDropdown, setSearch, refresh, clearFilter, filter, exportToExcel }: ToolBarProps) {
     return (
         <div className="flex flex-wrap items-center justify-between gap-4 p-2">
             <div className="flex-1 w-full sm:w-auto">
@@ -40,6 +41,7 @@ export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, cle
 
             <div className="flex items-center space-x-2">
                 <button
+                    onClick={filter}
                     className={`${!filter && 'hidden'} flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-600 focus:outline-none transition-transform transform hover:scale-105`}
                     title="Filtrar produtos"
                 >
@@ -65,33 +67,35 @@ export function ToolBar({ search, hrefe, descriptionBtn, setSearch, refresh, cle
                     </Button>
                 </Link>
 
-                <Dropdown>
-                    <DropdownTrigger>
-                        <button
-                            className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full shadow-md hover:bg-gray-200 focus:outline-none transition-transform transform hover:scale-110"
-                            title="Opções adicionais"
-                        >
-                            <BiDotsVerticalRounded className="text-2xl text-gray-600" />
-                        </button>
-                    </DropdownTrigger>
-                    <DropdownMenu aria-label="Opções do menu">
-                        <DropdownItem
-                            onClick={clearFilter}
-                            key="clearFilters"
-                            startContent={<MdFilterAltOff className="text-xl text-blue-500 pointer-events-none flex-shrink-0" />}
-                        >
-                            Remover Filtros
-                        </DropdownItem>
-                        <DropdownItem
-                            key="exportExcel"
-                            onClick={exportToExcel}
-                            className={`${!exportToExcel && 'hidden'}`}
-                            startContent={<RiFileExcel2Line className="text-xl text-green-700 pointer-events-none flex-shrink-0" />}
-                        >
-                            Exportar para Excel
-                        </DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
+                {isDropdown &&
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <button
+                                className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full shadow-md hover:bg-gray-200 focus:outline-none transition-transform transform hover:scale-110"
+                                title="Opções adicionais"
+                            >
+                                <BiDotsVerticalRounded className="text-2xl text-gray-600" />
+                            </button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Opções do menu">
+                            <DropdownItem
+                                onClick={clearFilter}
+                                key="clearFilters"
+                                startContent={<MdFilterAltOff className="text-xl text-blue-500 pointer-events-none flex-shrink-0" />}
+                            >
+                                Remover Filtros
+                            </DropdownItem>
+                            <DropdownItem
+                                key="exportExcel"
+                                onClick={exportToExcel}
+                                className={`${!exportToExcel && 'hidden'}`}
+                                startContent={<RiFileExcel2Line className="text-xl text-green-700 pointer-events-none flex-shrink-0" />}
+                            >
+                                Exportar para Excel
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                }
             </div>
         </div>
     );

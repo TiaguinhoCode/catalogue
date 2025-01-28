@@ -175,7 +175,7 @@ export function ProfileForm({ isEdit, id, name, surname, email, phone, cep, role
                         isLoading={loading}
                         onClick={() => setIsEdit(!isEdit)}
                         className="bg-blue-500 text-white hover:bg-blue-600 w-full sm:w-auto"
-                        startContent={!loading && isEdit ? <IoSaveOutline /> : <FaPencilAlt />}
+                        startContent={!loading && isEdit ? <IoSaveOutline className="text-xl" /> : <FaPencilAlt className="text-xl" />}
                     >
                         {isEdit ? 'Salvar' : 'Editar'}
                     </Button>

@@ -129,6 +129,7 @@ export function ContainerProducts({ categories, dataProducts, token }: Container
                         refresh={handleRefresh}
                         clearFilter={() => setSelectedCategories([])}
                         exportToExcel={handleExportToExcel}
+                        isDropdown={true}
                     />
                     <div className="mt-4">
                         <Table data={filteredProducts} handleRemove={handleRemove} createPromotion={handleCreatePromotion} loading={loading} collumns={columns} renderCell={renderCell} alert="O produto não foi encontrado." />
