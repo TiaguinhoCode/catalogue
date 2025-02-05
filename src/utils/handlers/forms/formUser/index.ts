@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 
 // Tipagem
 interface HandleCreateUserProps {
+  id?: string;
   name: string;
   surName: string;
   email: string;
@@ -15,6 +16,7 @@ interface HandleCreateUserProps {
   phone: string;
   cep: string;
   role: string;
+  editMode?: boolean;
   setName: (value: string) => void;
   setSurName: (value: string) => void;
   setEmail: (value: string) => void;
@@ -30,7 +32,8 @@ interface HandleCreateUserProps {
   setError: (isEoading: boolean) => void;
 }
 
-export async function handleCreateUser({
+export async function handleFormUser({
+  id,
   name,
   surName,
   email,
@@ -38,6 +41,7 @@ export async function handleCreateUser({
   phone,
   cep,
   role,
+  editMode,
   setName,
   setSurName,
   setEmail,
@@ -58,21 +62,22 @@ export async function handleCreateUser({
   const token = Cookies.get("@nextauth.token");
   const company = Cookies.get("@nextcompany.name");
   const api = setupApiClient(token);
-  
+
   if (
     name === "" &&
     surName === "" &&
     email === "" &&
-    password === "" &&
     phone === "" &&
     cep === "" &&
     role === ""
   ) {
-    toast.error("Por favor, preencha os campos obrigatórios.");
-    setError(true);
-    setLoading(false);
-    return;
-  } else if (!passwordRegex.test(password)) {
+    if (password === "" && !editMode) {
+      toast.error("Por favor, preencha os campos obrigatórios.");
+      setError(true);
+      setLoading(false);
+      return;
+    }
+  } else if (!editMode && !passwordRegex.test(password)) {
     toast.error(
       "A senha deve conter pelo menos 8 caracteres, incluindo 1 letra maiúscula, 1 número e 1 caractere especial."
     );
@@ -83,29 +88,45 @@ export async function handleCreateUser({
     const selectedRole = ruleData.find((rule) => rule.id === Number(role));
 
     try {
-      api.post(`/v1/create/user?company=${company}`, {
-        name,
-        surname: surName,
-        email,
-        password,
-        phone,
-        cep,
-        role: selectedRole?.name,
-      });
+      if (editMode) {
+        api.put(`/v1/user?id=${id}&company=${company}`, {
+          name,
+          surname: surName,
+          email,
+          phone,
+          cep,
+          role: selectedRole?.name,
+        });
 
-      toast.success("Novo usuário cadastrado com sucesso!");
+        toast.success("Usuário atualizado com sucesso!");
+
+        window.location.reload();
+      } else {
+        api.post(`/v1/create/user?company=${company}`, {
+          name,
+          surname: surName,
+          email,
+          password,
+          phone,
+          cep,
+          role: selectedRole?.name,
+        });
+
+        setName("");
+        setSurName("");
+        setEmail("");
+        setPassoword("");
+        setPhone("");
+        setCep("");
+        setAddress("");
+        setNeighborhood("");
+        setState("");
+        setCity("");
+        setRole("");
+      }
+
+      toast.success("Usuário cadastrado com sucesso!");
       setError(false);
-      setName("");
-      setSurName("");
-      setEmail("");
-      setPassoword("");
-      setPhone("");
-      setCep("");
-      setAddress("");
-      setNeighborhood("");
-      setState("");
-      setCity("");
-      setRole("");
     } catch (err) {
       console.log("Error: ", err);
       toast.error("Aconteceu algum erro tente novamente");

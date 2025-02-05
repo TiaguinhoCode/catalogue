@@ -1,21 +1,26 @@
 // Next
 import Link from "next/link";
 
-export function NotFound() {
+interface NotFoundProps {
+    message: string;
+    href: string;
+}
+
+export function NotFound({ message, href }: NotFoundProps) {
     return (
-        <div className="bg-[#f7f7f7] w-full h-screen flex items-center justify-center">
+        <div className="w-full flex items-center justify-center">
             <div className="bg-white border border-gray-200 rounded-lg shadow-xl flex flex-col items-center justify-center px-8 py-10 lg:px-24 lg:py-16 space-y-6">
                 <p className="text-6xl md:text-7xl lg:text-9xl font-extrabold text-gray-300">
                     500
                 </p>
                 <p className="text-xl md:text-2xl lg:text-4xl font-semibold text-center text-gray-600">
-                    A empresa que você está procurando não está registrada em nosso banco de dados.
+                    {message} {/* A empresa que você está procurando não está registrada em nosso banco de dados. */}
                 </p>
                 <p className="text-base md:text-lg lg:text-xl text-gray-500 text-center mt-4">
-                    Desculpe, não conseguimos encontrar a página ou dados que você estava buscando.
+                    Desculpe, não conseguimos encontrar os dados que você estava buscando.
                 </p>
                 <Link
-                    href="/"
+                    href={href}
                     className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition duration-300 transform hover:scale-105"
                     title="Voltar à página inicial"
                 >

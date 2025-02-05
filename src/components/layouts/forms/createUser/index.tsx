@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Options } from "@/components/ui/autoComplete"
 
 // React
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Dados
 import ruleData from "@/data/rule/rule.json"
@@ -19,22 +19,31 @@ import { IoArrowBackOutline, IoSaveOutline } from "react-icons/io5"
 // Utils
 import { applyPhoneMask } from "@/utils/mask/phone"
 import { fetchCep } from "@/utils/handlers/fetchCep"
-import { handleCreateUser } from "@/utils/handlers/forms/createUser"
+import { handleFormUser } from "@/utils/handlers/forms/formUser"
+
+// Link
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 
-export function CreateUserForm() {
-    const [name, setName] = useState<string>('')
-    const [surName, setSurName] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
+// Tipagem
+import { ItemsUser } from '@/types/users';
+interface CreateUserFormProps {
+    userData?: ItemsUser;
+    editMode?: boolean
+}
+
+export function CreateUserForm({ userData, editMode }: CreateUserFormProps) {
+    const [name, setName] = useState<string>(userData?.name || '')
+    const [surName, setSurName] = useState<string>(userData?.surname || '')
+    const [email, setEmail] = useState<string>(userData?.email || '')
     const [password, setPassoword] = useState<string>('')
-    const [phone, setPhone] = useState<string>('')
-    const [cep, setCep] = useState<string>('')
+    const [phone, setPhone] = useState<string>(userData?.phone || '')
+    const [cep, setCep] = useState<string>(userData?.cep || '')
     const [address, setAddress] = useState<string>('')
     const [neighborhood, setNeighborhood] = useState<string>('')
     const [state, setState] = useState<string>('')
     const [city, setCity] = useState<string>('')
-    const [role, setRole] = useState<string>('')
+    const [role, setRole] = useState<string>(userData?.role || '')
     const [loading, setLoading] = useState<boolean>(false)
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
@@ -53,10 +62,26 @@ export function CreateUserForm() {
         });
     };
 
+    useEffect(() => {
+        if (editMode && userData?.cep) {
+            fetchCep({
+                cep: userData.cep,
+                setCep,
+                setAddress,
+                setNeighborhood,
+                setCity,
+                setState,
+                setLoading,
+            });
+        }
+    }, [editMode, userData?.cep]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        await handleCreateUser({
+        await handleFormUser({
+            editMode,
+            id: userData?.id,
             name,
             surName,
             email,
@@ -79,7 +104,7 @@ export function CreateUserForm() {
             setLoading,
         });
     };
-
+    
     return (
         <Container>
             <form onSubmit={handleSubmit} className="w-full">
@@ -143,6 +168,7 @@ export function CreateUserForm() {
                         />
                         <Input
                             label="Senha* "
+                            className={`${editMode && 'hidden'}`}
                             labelPlacement="outside"
                             type={isVisible ? "text" : "password"}
                             classNames={{ inputWrapper: "border-gray-300 group-data-[focus=true]:border-gray-500" }}
@@ -172,6 +198,7 @@ export function CreateUserForm() {
                             variant="bordered"
                             aria-label="Telefone do funcionário"
                         />
+
                     </div>
 
                     <div className="lg:col-span-3 cursor-not-allowed flex gap-4">

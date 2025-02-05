@@ -173,7 +173,6 @@ export function ProductForm({ company, categoryData, token, initialValues, isEdi
                             label="Categoria"
                             data={categoryData}
                             isInvalid={error}
-                            dataKey="name"
                             value={categoryId}
                             setValue={setCategoryId}
                             placeholder="Selecione uma categoria"

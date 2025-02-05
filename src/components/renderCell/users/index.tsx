@@ -44,7 +44,7 @@ export const renderCell = (
                 <div className="relative flex items-center gap-3">
                     <Tooltip placement="left-start" content="Editar Produto">
                         <Link
-                            href={``}
+                            href={`/${company}/admin/settings/users/edit/${item.id}`}
                             className="text-lg text-blue-500 cursor-pointer hover:text-blue-700 transition-all duration-300 ease-in-out active:opacity-70"
                         >
                             <FaPencilAlt size={18} />
