@@ -25,7 +25,7 @@ export default async function SigIn({ params }: SignInProps) {
     );
 
     if (!company) {
-        return <NotFound />;
+        return <NotFound message='A empresa que você está procurando não está registrada em nosso banco de dados.' href='/' />;
     }
 
     return (
