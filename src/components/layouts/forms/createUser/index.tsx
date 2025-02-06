@@ -27,6 +27,7 @@ import Link from "next/link"
 
 // Tipagem
 import { ItemsUser } from '@/types/users';
+import { Checkbox } from "@nextui-org/react"
 interface CreateUserFormProps {
     userData?: ItemsUser;
     editMode?: boolean
@@ -44,6 +45,7 @@ export function CreateUserForm({ userData, editMode }: CreateUserFormProps) {
     const [state, setState] = useState<string>('')
     const [city, setCity] = useState<string>('')
     const [role, setRole] = useState<string>(userData?.role || '')
+    const [isActive, setIsActive] = useState<boolean>(userData?.is_active || false);
     const [loading, setLoading] = useState<boolean>(false)
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
@@ -89,6 +91,7 @@ export function CreateUserForm({ userData, editMode }: CreateUserFormProps) {
             phone,
             cep,
             role,
+            isActive,
             setAddress,
             setCep,
             setCity,
@@ -104,7 +107,7 @@ export function CreateUserForm({ userData, editMode }: CreateUserFormProps) {
             setLoading,
         });
     };
-    
+
     return (
         <Container>
             <form onSubmit={handleSubmit} className="w-full">
@@ -260,15 +263,28 @@ export function CreateUserForm({ userData, editMode }: CreateUserFormProps) {
                             aria-label="Cidade do endereço"
                         />
                     </div>
-                    <div className="lg:col-span-3 flex gap-4">
-                        <Options
-                            label="Nivel de acesso* "
-                            data={ruleData}
-                            value={role}
-                            setValue={setRole}
-                            placeholder="Digite sua regras"
-                            isInvalid={error}
-                        />
+                    <div className="lg:col-span-3 items-center flex gap-4">
+                        <div className="w-full">
+                            <Options
+                                label="Nivel de acesso* "
+                                data={ruleData}
+                                value={role}
+                                setValue={setRole}
+                                placeholder="Digite sua regras"
+                                isInvalid={error}
+                            />
+                        </div>
+                        <div className="py-3 w-52">
+                            <p className="text-gray-700 text-sm font-medium">Ativo? </p>
+                            <div className="flex items-center gap-4 py-2">
+                                <Checkbox isSelected={isActive} onChange={() => setIsActive(true)}>
+                                    Sim
+                                </Checkbox>
+                                <Checkbox isSelected={!isActive} onChange={() => setIsActive(false)}>
+                                    Não
+                                </Checkbox>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

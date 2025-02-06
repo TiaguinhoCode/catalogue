@@ -16,6 +16,7 @@ interface HandleCreateUserProps {
   phone: string;
   cep: string;
   role: string;
+  isActive: boolean;
   editMode?: boolean;
   setName: (value: string) => void;
   setSurName: (value: string) => void;
@@ -41,6 +42,7 @@ export async function handleFormUser({
   phone,
   cep,
   role,
+  isActive,
   editMode,
   setName,
   setSurName,
@@ -94,6 +96,7 @@ export async function handleFormUser({
           surname: surName,
           email,
           phone,
+          is_active: isActive,
           cep,
           role: selectedRole?.name,
         });
