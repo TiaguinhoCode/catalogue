@@ -32,7 +32,7 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
         { label: "Dashboard", icon: <AiOutlineDashboard size={25} />, href: `/${companies}/admin` },
         { label: "Produtos", icon: <IoPricetagsOutline size={25} />, href: `/${companies}/admin/products` },
         { label: "Configuração", icon: <IoSettingsOutline size={25} />, href: `/${companies}/admin/settings` },
-        { label: "Pedidos", icon: <FaClipboardList size={25} />, href: `/${companies}/admin/orders` },
+        // { label: "Pedidos", icon: <FaClipboardList size={25} />, href: `/${companies}/admin/orders` },
     ];
 
     return (
