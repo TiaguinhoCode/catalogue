@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export function Manutencion() {
     return (
-        <section className="min-h-screen flex items-center justify-center text-gray-800">
+        <section className="max-h-screen h-full flex items-center justify-center text-gray-800">
             <div className="text-center px-6 py-12 mx-auto max-w-screen-md">
                 <motion.div
                     className="mx-auto mb-6"

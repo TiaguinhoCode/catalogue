@@ -2,10 +2,9 @@
 
 // Bibliotecas
 import { Dropdown, DropdownMenu, DropdownItem, DropdownTrigger, Tooltip, Avatar } from "@nextui-org/react";
-import { FaUserAlt } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { AiOutlineDashboard } from "react-icons/ai";
-import { IoPricetagsOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoPricetagsOutline, IoSettingsOutline, IoTicketOutline } from "react-icons/io5";
 
 // React
 import { useContext } from "react";
@@ -18,6 +17,7 @@ import slogan from "./../../../../../../public/slogan.png";
 import Image from "next/image";
 import { ActiveLink } from "../activeLink";
 import { usePathname } from "next/navigation";
+import { FaClipboardList } from "react-icons/fa";
 
 // Tipagem
 interface SideBarProps {
@@ -32,6 +32,7 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
         { label: "Dashboard", icon: <AiOutlineDashboard size={25} />, href: `/${companies}/admin` },
         { label: "Produtos", icon: <IoPricetagsOutline size={25} />, href: `/${companies}/admin/products` },
         { label: "Configuração", icon: <IoSettingsOutline size={25} />, href: `/${companies}/admin/settings` },
+        { label: "Pedidos", icon: <FaClipboardList size={25} />, href: `/${companies}/admin/orders` },
     ];
 
     return (
@@ -79,7 +80,7 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
                     <DropdownTrigger>
                         <div className="flex items-center space-x-2 cursor-pointer rounded-lg p-2 transition-all duration-200 bg-gray-100 hover:bg-blue-50 hover:shadow-lg">
                             <div className="flex items-center justify-center">
-                                <Avatar src={user?.photo} alt="Foto do usuário" as="button" className="transition-transform" classNames={{ base: "w-8 h-8 relative overflow-hidden bg-blue-500 text-white" }}/>
+                                <Avatar src={user?.photo} alt="Foto do usuário" as="button" className="transition-transform" classNames={{ base: "w-8 h-8 relative overflow-hidden bg-blue-500 text-white" }} />
                                 {/* <FaUserAlt size={15} className="text-white" /> p-2 rounded-full bg-blue-500  */}
                             </div>
                             <div className={`flex flex-col transition-opacity duration-200 ${isExpanded ? "opacity-100" : "opacity-0"}`}>
@@ -103,7 +104,7 @@ export function SideBar({ isExpanded, companies }: SideBarProps) {
                             </div>
                         </DropdownItem>
 
-                        <DropdownItem key="configurations" href={`/${companies}/admin/settings/profile`}  className="py-2 hover:bg-gray-100">
+                        <DropdownItem key="configurations" href={`/${companies}/admin/settings/profile`} className="py-2 hover:bg-gray-100">
                             <div className="flex items-center space-x-2">
                                 <span className="text-sm text-gray-700">Configurações</span>
                             </div>
