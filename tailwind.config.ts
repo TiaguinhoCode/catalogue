@@ -10,6 +10,11 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@heroui/theme/dist/components/(drawer|modal).js"
   ],
+  safelist: [
+    "from-blue-500 to-violet-500",
+    "from-red-600 to-orange-600",
+    "from-emerald-500 to-teal-400",
+  ],
   theme: {
     extend: {
       colors: {
